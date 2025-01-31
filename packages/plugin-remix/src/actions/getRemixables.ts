@@ -7,28 +7,28 @@ import {
     Memory,
     State,
 } from "@elizaos/core";
-import { validateCoinopConfig } from "../environment";
-import { coinopExamples } from "../examples";
-import { createCoinopService } from "../services";
+import { validateRemixConfig } from "../environment";
+import { remixExamples } from "../examples";
+import { createRemixService } from "../services";
 import { v4 as uuidv4 } from "uuid";
 
-export const getFormatsAction: Action = {
-    name: "COINOP_GET_FORMATS",
+export const getRemixablesAction: Action = {
+    name: "COINOP_GET_REMIXABLES",
     similes: [
-        "LIST_FORMATS",
-        "FETCH_FORMATS",
-        "SHOW_FORMATS",
-        "GET_COIN_FORMATS",
-        "RETRIEVE_FORMATS",
-        "LOAD_FORMATS",
-        "AVAILABLE_FORMATS",
+        "LIST_REMIXABLES",
+        "FETCH_REMIXABLES",
+        "SHOW_REMIXABLES",
+        "GET_COIN_REMIXABLES",
+        "RETRIEVE_REMIXABLES",
+        "LOAD_REMIXABLES",
+        "AVAILABLE_REMIXABLES",
         "FORMAT_OPTIONS",
-        "DISPLAY_FORMATS",
+        "DISPLAY_REMIXABLES",
         "FORMAT_LIST",
     ],
-    description: "Get Coinop formats.",
+    description: "Get TripleA remixables.",
     validate: async (runtime: IAgentRuntime) => {
-        await validateCoinopConfig(runtime);
+        await validateRemixConfig(runtime);
         return true;
     },
     handler: async (
@@ -38,22 +38,22 @@ export const getFormatsAction: Action = {
         _options: { [key: string]: unknown },
         callback: HandlerCallback
     ) => {
-        const config = await validateCoinopConfig(runtime);
-        const coinopService = createCoinopService(config.THE_GRAPH_KEY);
+        const config = await validateRemixConfig(runtime);
+        const remixService = createRemixService(config.THE_GRAPH_KEY);
 
         try {
-            const allFormats = await coinopService.getFormats();
+            const allFormats = await remixService.getRemixables();
             elizaLogger.success(`Successfully fetched formats`);
             if (callback) {
                 callback({
-                    text: `Choose your format: hoodie, tee, sticker or poster.`,
+                    text: `Select an NFT to remix: `,
                     attachments: allFormats.map((item) => ({
                         url: `${config.IPFS_GATEWAY}${item.image?.split("ipfs://")}`,
-                        title: item.type,
-                        description: `${item.category} -> ${item.type}`,
+                        title: item.title,
+                        description: item.title,
                         id: uuidv4(),
                         source: item.image,
-                        text: `${item.category} -> ${item.type}`,
+                        text: item.title,
                     })),
                 });
                 return true;
@@ -67,5 +67,5 @@ export const getFormatsAction: Action = {
             return false;
         }
     },
-    examples: coinopExamples as ActionExample[][],
+    examples: remixExamples as ActionExample[][],
 } as Action;

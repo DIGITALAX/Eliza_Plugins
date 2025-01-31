@@ -1,10 +1,6 @@
-import { APODResponse, MarsRoverDataResponse } from "./types";
-
-const BASE_URL = "https://api.nasa.gov/planetary/apod\?api_key\=";
-
 export const createCoinopService = (apiKey: string) => {
     const getTemplates = async (
-        template: string
+        format: string
     ): Promise<
         {
             image: string;
@@ -17,7 +13,7 @@ export const createCoinopService = (apiKey: string) => {
         }
 
         try {
-            const data = await getFormatsGraph(template);
+            const data = await getFormatsGraph(format);
             return data?.data?.templates;
         } catch (error: any) {
             console.error("Templates API Error:", error.message);
@@ -41,7 +37,35 @@ export const createCoinopService = (apiKey: string) => {
         }
     };
 
-    const getPresets = async (): Promise<MarsRoverDataResponse> => {
+    const getPresets = async (
+        template: string
+    ): Promise<
+        {
+            image: string;
+            type: string;
+            category: string;
+        }[]
+    > => {
+        try {
+            const data = await getPresetsGraph(template);
+            return data?.data?.presets;
+        } catch (error: any) {
+            console.error("NASA Mars Rover API Error:", error.message);
+            throw error;
+        }
+    };
+
+    const synthesize = async (preset: string): Promise<string> => {
+        try {
+            const data = await fetchMarsPhotos(preset);
+            return data;
+        } catch (error: any) {
+            console.error("NASA Mars Rover API Error:", error.message);
+            throw error;
+        }
+    };
+
+    const createModelShots = async (): Promise<string[]> => {
         try {
             const data = await fetchMarsPhotos(apiKey);
             return data;
@@ -51,27 +75,7 @@ export const createCoinopService = (apiKey: string) => {
         }
     };
 
-    const synthesize = async (): Promise<MarsRoverDataResponse> => {
-        try {
-            const data = await fetchMarsPhotos(apiKey);
-            return data;
-        } catch (error: any) {
-            console.error("NASA Mars Rover API Error:", error.message);
-            throw error;
-        }
-    };
-
-    const createModelShots = async (): Promise<MarsRoverDataResponse> => {
-        try {
-            const data = await fetchMarsPhotos(apiKey);
-            return data;
-        } catch (error: any) {
-            console.error("NASA Mars Rover API Error:", error.message);
-            throw error;
-        }
-    };
-
-    const mint = async (): Promise<MarsRoverDataResponse> => {
+    const mint = async (): Promise<string> => {
         try {
             const data = await fetchMarsPhotos(apiKey);
             return data;

@@ -7,12 +7,12 @@ import {
     Memory,
     State,
 } from "@elizaos/core";
-import { validateCoinopConfig } from "../environment";
-import { coinopExamples } from "../examples";
-import { createCoinopService } from "../services";
+import { validateRemixConfig } from "../environment";
+import { remixExamples } from "../examples";
+import { createRemixService } from "../services";
 
 export const mintAction: Action = {
-    name: "COINOP_MINT",
+    name: "REMIX_MINT",
     similes: [
         "MINT_TOKEN",
         "CREATE_NFT",
@@ -25,9 +25,9 @@ export const mintAction: Action = {
         "MINT_COLLECTIBLE",
         "NFT_CREATION",
     ],
-    description: "Mint to Coinop.",
+    description: "Mint to Remix.",
     validate: async (runtime: IAgentRuntime) => {
-        await validateCoinopConfig(runtime);
+        await validateRemixConfig(runtime);
         return true;
     },
     handler: async (
@@ -37,16 +37,16 @@ export const mintAction: Action = {
         _options: { [key: string]: unknown },
         callback: HandlerCallback
     ) => {
-        const config = await validateCoinopConfig(runtime);
-        const coinopService = createCoinopService(config.THE_GRAPH_KEY);
+        const config = await validateRemixConfig(runtime);
+        const remixService = createRemixService(config.THE_GRAPH_KEY);
 
         try {
-            const modelShots = await coinopService.createModelShots();
+            await remixService.mint();
             elizaLogger.success(`Successfully fetched presets`);
             if (callback) {
                 callback({
-                    text: `Minted! Congrats, it's minted and ready to sell on coinop. Check out it out here: `,
-                    url: `https://coinop.themanufactory.xyz/`,
+                    text: `Minted! Congrats, it's minted and ready to sell on TripleA. Check out it out here: `,
+                    url: `https://triplea.agentmeme.xyz/`,
                 });
                 return true;
             }
@@ -59,5 +59,5 @@ export const mintAction: Action = {
             return false;
         }
     },
-    examples: coinopExamples as ActionExample[][],
+    examples: remixExamples as ActionExample[][],
 } as Action;
