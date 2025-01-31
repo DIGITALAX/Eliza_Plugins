@@ -170,6 +170,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
                 <ChatMessageList ref={messagesContainerRef}>
                     {transitions((styles, message) => {
                         const variant = getMessageVariant(message?.user);
+
                         return (
                             // @ts-expect-error
                             <animated.div

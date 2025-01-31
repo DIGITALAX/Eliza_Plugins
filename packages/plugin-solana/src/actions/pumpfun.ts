@@ -1,8 +1,8 @@
-import { AnchorProvider } from "@coral-xyz/anchor";
-import { Wallet } from "@coral-xyz/anchor";
 import { generateImage } from "@elizaos/core";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { CreateTokenMetadata, PriorityFee, PumpFunSDK } from "pumpdotfun-sdk";
+import * as anchor from "@coral-xyz/anchor";
+const { AnchorProvider, Wallet, BN } = anchor;
 
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import {

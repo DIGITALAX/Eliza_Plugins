@@ -40,6 +40,7 @@ const fetcher = async ({
             if (contentType === "audio/mpeg") {
                 return await resp.blob();
             }
+
             return resp.json();
         }
 
