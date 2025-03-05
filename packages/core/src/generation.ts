@@ -439,13 +439,6 @@ export async function generateText({
                     fetch: runtime.fetch,
                 });
 
-                console.log({
-                    context,
-                    system:
-                        runtime.character.system ??
-                        settings.SYSTEM_PROMPT ??
-                        undefined,
-                });
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
@@ -464,7 +457,11 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                console.log("Received response from OpenAI model. AQUIIII");
+                console.log(
+                    "Received response from OpenAI model: ",
+                    response,
+                    "\n"
+                );
                 break;
             }
 

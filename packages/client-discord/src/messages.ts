@@ -1242,6 +1242,8 @@ export class MessageManager {
             modelClass: ModelClass.SMALL,
         });
 
+        console.log({ response });
+
         if (response === "RESPOND") {
             if (channelState) {
                 channelState.previousContext = {

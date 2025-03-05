@@ -9,6 +9,13 @@ concatenated-output.ts
 embedding-cache.json
 packages/plugin-buttplug/intiface-engine
 
+/client/
+/.github/
+/cache/
+/docs/
+/.vscode/
+/.devcontainer/
+/tests/
 .idea
 .DS_Store
 
