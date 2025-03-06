@@ -32,6 +32,7 @@ export const createSearchService = (apiKey: string) => {
     workflowCreateds(
   where: {${where}}
     ) {
+        creator
         workflowMetadata {
             name
             description

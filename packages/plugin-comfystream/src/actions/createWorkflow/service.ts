@@ -2,7 +2,7 @@ import pkg from "@apollo/client";
 const { ApolloClient, InMemoryCache, HttpLink, gql } = pkg;
 
 const ALL_WORKFLOWS_QUERY = `query {
-    workflowCreateds(first: 1000) {
+    workflowCreateds(first: 10) {
       workflowMetadata {
         workflow
       }
