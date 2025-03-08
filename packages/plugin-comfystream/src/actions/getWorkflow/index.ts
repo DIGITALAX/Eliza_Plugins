@@ -11,7 +11,7 @@ import {
 } from "@elizaos/core";
 import { validateComfyStreamConfig } from "../../environment";
 import { comfyStreamExamples } from "./examples";
-import { createSearchService } from "./service";
+import { searchService } from "./service";
 import { getWorkflowTemplate } from "./template";
 
 export default {
@@ -59,10 +59,10 @@ export default {
             // Get workflows from database
             const config = await validateComfyStreamConfig(runtime);
 
-            const searchService = createSearchService(config.GRAPH_API_KEY);
+            const service = searchService(config.GRAPH_API_KEY);
 
             try {
-                const workflowData = await searchService.getWorkflows(content);
+                const workflowData = await service.getWorkflows(content);
                 elizaLogger.success(
                     `Workflows retrieved successfully! ${content}: ${workflowData.length}`
                 );
@@ -74,7 +74,7 @@ export default {
                         });
                     } else {
                         callback({
-                            text: `I couldn't find any matching workflows, here is the search that I used based on what you told me: "${content}". Should I change something and try again?`,
+                            text: `I couldn't find any matching workflows, here is the search that I used based on what you told me: "${content}". I can change something and try again?`,
                         });
                     }
                 }
@@ -84,7 +84,7 @@ export default {
                 elizaLogger.error("Error in GET_WORKFLOW handler:", error);
                 if (callback) {
                     callback({
-                        text: `Error fetching workflow: ${error.message}`,
+                        text: `Sorry to hear that, kid. Got tripped up by ${error.message}. Typical.\n\nWant me to try again? Or are you going to stand there staring at your screen all day?`,
                         content: { error: error.message },
                     });
                 }

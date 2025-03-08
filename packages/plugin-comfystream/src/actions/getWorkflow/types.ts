@@ -1,8 +1,10 @@
-import { Content } from "@elizaos/core";
-
 export interface Workflow {
-    name: string;
-    description: string;
-    tags: string;
-    workflow: string;
+    workflowMetadata: {
+        name: string;
+        description: string;
+        tags: string;
+        workflow: string;
+        cover: string;
+    };
+    creator: string;
 }

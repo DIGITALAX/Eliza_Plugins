@@ -2,7 +2,7 @@ import pkg from "@apollo/client";
 const { ApolloClient, InMemoryCache, HttpLink, gql } = pkg;
 import { Workflow } from "./types";
 
-export const createSearchService = (apiKey: string) => {
+export const searchService = (apiKey: string) => {
     const client = new ApolloClient({
         link: new HttpLink({
             uri: `https://api.studio.thegraph.com/query/37770/lucidity/version/latest`,
