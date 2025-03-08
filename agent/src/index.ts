@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
 import sqlite3 from "better-sqlite3";
+import os from "os";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, "./../../.env") });
@@ -58,8 +59,19 @@ function closeSession(sessionId: string): void {
         }
 
         console.log(`🔓 Liberando puerto ${session.port}`);
+
         try {
-            execSync(`fuser -k ${session.port}/tcp`);
+            if (os.platform() === "linux" || os.platform() === "darwin") {
+                execSync(`lsof -ti:${session.port} | xargs kill -9`);
+            } else if (os.platform() === "win32") {
+                execSync(
+                    `netstat -ano | findstr :${session.port} | findstr LISTENING | for /f "tokens=5" %a in ('findstr') do taskkill /PID %a /F`
+                );
+            } else {
+                console.warn(
+                    "⚠️ Sistema operativo desconocido. No se puede liberar el puerto."
+                );
+            }
         } catch (err) {
             console.warn(
                 `⚠️ No se pudo liberar el puerto ${session.port}. Puede que ya esté libre.`
