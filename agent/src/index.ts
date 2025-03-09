@@ -115,10 +115,35 @@ app.post("/connect", async (req: Request, res: Response) => {
             startTime,
         });
 
-        res.json({ message: "Agente iniciado", sessionId, port });
+        res.json({ message: "Agente iniciado", sessionId });
     } catch (error) {
         console.error("Error starting agent:", error);
         res.status(500).json({ error: "Failed to start agent" });
+    }
+});
+
+app.post("/chat/:sessionId", async (req: any, res: any) => {
+    const { sessionId } = req.params;
+    const session = activeSessions.get(sessionId);
+
+    if (!session) {
+        return res.status(404).json({ error: "Sesión no encontrada" });
+    }
+
+    const targetUrl = `http://localhost:${session.port}/e51f224d-70d3-0f8c-90d5-e456b6ab9822/message`;
+
+    try {
+        const response = await fetch(targetUrl, {
+            method: "POST",
+            headers: { "x-api-key": process.env.RENDER_API_KEY! },
+            body: JSON.stringify(req.body),
+        });
+
+        const responseData = await response.json();
+        res.status(response.status).json(responseData);
+    } catch (error) {
+        console.error("Error en la comunicación interna:", error);
+        res.status(500).json({ error: "Error al comunicarse con el agente" });
     }
 });
 
