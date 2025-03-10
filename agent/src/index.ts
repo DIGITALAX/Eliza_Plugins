@@ -279,27 +279,29 @@ export function parseArguments(): {
     dbName?: string;
 } {
     try {
-        return yargs(process.argv.slice(3))
-            .option("character", {
-                type: "string",
-                description: "Path to the character JSON file",
-            })
-            .option("characters", {
-                type: "string",
-                description:
-                    "Comma separated list of paths to character JSON files",
-            })
-            .option("port", {
-                type: "number",
-                description: "Puerto del agente",
-                demandOption: true,
-            })
-            .option("dbName", {
-                type: "string",
-                description: "Nombre de la base de datos",
-                demandOption: true,
-            })
-            .parseSync();
+        return (
+            yargs(process.argv.slice(3))
+                .option("character", {
+                    type: "string",
+                    description: "Path to the character JSON file",
+                })
+                .option("characters", {
+                    type: "string",
+                    description:
+                        "Comma separated list of paths to character JSON files",
+                })
+                // .option("port", {
+                //     type: "number",
+                //     description: "Puerto del agente",
+                //     demandOption: true,
+                // })
+                // .option("dbName", {
+                //     type: "string",
+                //     description: "Nombre de la base de datos",
+                //     demandOption: true,
+                // })
+                .parseSync()
+        );
     } catch (error) {
         elizaLogger.error("Error parsing arguments:", error);
         return {};
