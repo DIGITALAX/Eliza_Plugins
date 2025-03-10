@@ -133,13 +133,21 @@ export class DirectClient {
         );
 
         this.app.use((req: any, res: any, next: any): void => {
-            const allowedOrigin = "https://lucidity.agentmeme.xyz";
-            const apiKey = process.env.RENDER_API_KEY;
+            const allowedOrigins = [
+                "https://lucidity.agentmeme.xyz",
+                "https://lucidity.agentmeme.xyz/es",
+                "https://lucidity.agentmeme.xyz/en",
+            ];
 
-            if (req.get("origin") !== allowedOrigin) {
-                res.status(403).json({ error: "Origen no permitido" });
-                return;
+            const requestOrigin = req.get("origin");
+
+            if (requestOrigin && !allowedOrigins.includes(requestOrigin)) {
+                return res
+                    .status(403)
+                    .json({ error: "Origen no permitido", requestOrigin });
             }
+
+            const apiKey = process.env.RENDER_API_KEY;
 
             if (req.get("x-api-key") !== apiKey) {
                 res.status(401).json({ error: "Clave API inválida" });
