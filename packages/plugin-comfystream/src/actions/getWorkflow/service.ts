@@ -39,6 +39,8 @@ export const searchService = (apiKey: string) => {
             workflow
             tags
             cover
+            setup
+            links
         }
     }
   }`),
